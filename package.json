@@ -1,6 +1,6 @@
 {
   "name": "NumberParser",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "A simple number formatting utility for Javascript and Node.js",
   "main": "numberparser.js",
   "scripts": {
