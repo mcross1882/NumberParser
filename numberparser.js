@@ -137,7 +137,6 @@ NumberParser.prototype.injectSeparators = function(value, separator, decimalPoin
     var possibleSymbols = separator + decimalPoint;
     var hasThousand = new RegExp('(\\d\\d\\d\\d)[' + possibleSymbols + ']');
     var partToSplit = new RegExp('([^' + possibleSymbols + '])(\\d\\d\\d)([' + possibleSymbols + '])');
-
     tempValue = tempValue.replace(/(\d\d\d)$/g, separator + "$1");
     while (hasThousand.test(tempValue)) {
         tempValue = tempValue.replace(partToSplit, "$1" + separator + "$2$3");

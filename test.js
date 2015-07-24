@@ -42,7 +42,7 @@ describe('formatNumber(value, format, options)', function() {
     });
 
     it('should not add separators to the remainder', function() {
-        assert.equal('100.555555', formatNumber(100.555555, "%.6f"));
+        assert.equal('1,000.555555', formatNumber(1000.555555, "%.6sf"));
     });
 
     it('should allow of overriding of default symbol formatting', function() {
