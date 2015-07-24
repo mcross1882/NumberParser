@@ -40,6 +40,6 @@ assert.equal('10,000',    formatNumber(10000, "%sd"));
 assert.equal('2,345.67',  formatNumber(2345.67, "%sf"));
 
 // You can also customize the formatting by passing in an options object
-assert.equal('$10.500,25', formatNumber(10500.25, "$%sf", { separator: '.', decimalPoint: ',' }));
+assert.equal('€10.500,25', formatNumber(10500.25, "€%sf", { separator: '.', decimalPoint: ',' }));
 ```
 
