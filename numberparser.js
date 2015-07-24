@@ -98,7 +98,7 @@ NumberParser.prototype.formatFloat = function(value, format) {
 
     var newPrecision = parseFloat(value).toPrecision(formatParts.precision);
     var newScale = parseFloat(newPrecision).toFixed(formatParts.scale);
-    return format.replace(this.FLOAT_REGEX, newScale);
+    return format.replace(this.FLOAT_REGEX, newScale).replace(/[,.]/g, this.decimalPoint);
 }
 
 NumberParser.prototype.extractFloatFormat = function(format) {
@@ -145,13 +145,8 @@ NumberParser.prototype.injectSeparators = function(value, separator, decimalPoin
     return tempValue;
 }
 
-var cachedNumberParser = null;
-
 function formatNumber(value, format, options) {
-    if (!cachedNumberParser) {
-        cachedNumberParser = new NumberParser(options);
-    }
-    return cachedNumberParser.parseValue(value, format);
+    return new NumberParser(options).parseValue(value, format);
 }
 
 if (module && module.exports) {

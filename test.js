@@ -19,6 +19,7 @@ describe('formatNumber(value, format, separator)', function() {
     it('should format value with symbols', function() {
         assert.equal('$123.456', formatNumber(123.456, "$%.3f"));
         assert.equal('45.75%', formatNumber(45.75, "%.2f%"));
+        assert.equal('$10.500,25', formatNumber(10500.25, "$%sf", { separator: '.', decimalPoint: ',' }));
     });
 
     it('should format integers with separators', function() {
