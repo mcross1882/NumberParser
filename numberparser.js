@@ -30,6 +30,8 @@ NumberParser.prototype.parseValue = function(value, format, separator) {
         case 'f':
             result = this.formatFloat(value, format);
             break;
+        default:
+            throw new Error('Unknown format type "' + matches[1] + '" was given');
     }
 
     if (separator) {
