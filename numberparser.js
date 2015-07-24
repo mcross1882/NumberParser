@@ -149,7 +149,7 @@ var cachedNumberParser = null;
 
 function formatNumber(value, format, options) {
     if (!cachedNumberParser) {
-        cachedNumberParser = new NumberParser();
+        cachedNumberParser = new NumberParser(options);
     }
     return cachedNumberParser.parseValue(value, format);
 }
