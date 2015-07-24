@@ -1,7 +1,7 @@
 var formatNumber = require('./numberparser');
 var assert = require('assert');
 
-describe('formatNumber(value, format, separator)', function() {
+describe('formatNumber(value, format, options)', function() {
     it('should format decimal values', function() {
         assert.equal('123', formatNumber(123, "%d"));
         assert.equal('000123', formatNumber(123, "%06d"));
@@ -19,7 +19,6 @@ describe('formatNumber(value, format, separator)', function() {
     it('should format value with symbols', function() {
         assert.equal('$123.456', formatNumber(123.456, "$%.3f"));
         assert.equal('45.75%', formatNumber(45.75, "%.2f%"));
-        assert.equal('$10.500,25', formatNumber(10500.25, "$%sf", { separator: '.', decimalPoint: ',' }));
     });
 
     it('should format integers with separators', function() {
@@ -44,5 +43,9 @@ describe('formatNumber(value, format, separator)', function() {
 
     it('should not add separators to the remainder', function() {
         assert.equal('100.555555', formatNumber(100.555555, "%.6f"));
+    });
+
+    it('should allow of overriding of default symbol formatting', function() {
+        assert.equal('€10.500,25', formatNumber(10500.25, "€%sf", { separator: '.', decimalPoint: ',' }));
     });
 });
