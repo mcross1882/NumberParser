@@ -6,24 +6,27 @@
  */
 (function() {
 
-var NumberParser = function() {
-    this.INTEGER_REGEX     = /%([0-9])?(\d+)?d/;
-    this.FLOAT_REGEX       = /%(\d+)?\.?(\d+)?f/;
-    this.FORMAT_REGEX      = /%.*([df])/;
+var NumberParser = function(options) {
+    options = options || {};
+    var separator = options.separator ? options.separator : ',';
+    var decimalPoint = options.decimalPoint ? options.decimalPoint : '.';
+
+    this.INTEGER_REGEX     = new RegExp('%([0-9])?(\\d+)?([s])?d');
+    this.FLOAT_REGEX       = new RegExp('%(\\d+)?' + decimalPoint + '?(\\d+)?([s])?f');
+    this.FORMAT_REGEX      = new RegExp('%.*?([s])?([df])');
     this.DEFAULT_DIGIT     = '0';
     this.DEFAULT_WIDTH     = null;
     this.DEFAULT_PRECISION = 12;
     this.DEFAULT_SCALE     = 2;
+
+    this.separator = separator;
+    this.decimalPoint = decimalPoint;
 }
 
-NumberParser.prototype.parseValue = function(value, format, separator) {
-    var matches = format.match(this.FORMAT_REGEX);
-    if (!matches || matches.length < 2 || !matches[1]) {
-        throw new Error("Could not parse " + format);
-    }
-
+NumberParser.prototype.parseValue = function(value, format) {
+    var parts = this.extractFormatParts(format);
     var result = value;
-    switch (matches[1]) {
+    switch (parts.formatType) {
         case 'd':
             result = this.formatInteger(value, format);
             break;
@@ -31,13 +34,26 @@ NumberParser.prototype.parseValue = function(value, format, separator) {
             result = this.formatFloat(value, format);
             break;
         default:
-            throw new Error('Unknown format type "' + matches[1] + '" was given');
+            throw new Error('Unknown format type "' + parts.formatType + '" was given');
     }
 
-    if (separator) {
-        result = this.addSeparators(result, separator);
+    if (parts.usingSeparator) {
+        result = this.addSeparators(result);
     }
+
     return result;
+}
+
+NumberParser.prototype.extractFormatParts = function(format) {
+    var matches = format.match(this.FORMAT_REGEX);
+    if (!matches || matches.length < 3 || !matches[2]) {
+        throw new Error("Could not parse " + format);
+    }
+
+    return {
+        usingSeparator: matches[1] ? matches[1] : false,
+        formatType: matches[2]
+    };
 }
 
 NumberParser.prototype.formatInteger = function(value, format) {
@@ -45,6 +61,7 @@ NumberParser.prototype.formatInteger = function(value, format) {
     if (formatParts) {
         value = this.zeroFillValue(value, formatParts.digit, formatParts.width);
     }
+
     return format.replace(this.INTEGER_REGEX, value);
 }
 
@@ -86,7 +103,7 @@ NumberParser.prototype.formatFloat = function(value, format) {
 
 NumberParser.prototype.extractFloatFormat = function(format) {
     var matches = format.match(this.FLOAT_REGEX);
-    if (!matches || matches.length < 3 || (!matches[1] && !matches[2])) {
+    if (!matches || matches.length < 3) {
         return null;
     }
 
@@ -96,41 +113,45 @@ NumberParser.prototype.extractFloatFormat = function(format) {
     };
 }
 
-NumberParser.prototype.addSeparators = function(value, separator) {
+NumberParser.prototype.addSeparators = function(value) {
     if (!value) {
         return value;
     }
 
-    var splitValue = value.toString().split(".");
-    var tempValue = this.injectSeparators(splitValue[0], separator);
+    var splitValue = value.toString().split(this.decimalPoint);
+    var tempValue = this.injectSeparators(splitValue[0], this.separator, this.decimalPoint);
 
     if (splitValue.length == 2) {
-        tempValue += "." + splitValue[1];
+        tempValue += this.decimalPoint + splitValue[1];
     }
 
     return tempValue;
 }
 
-NumberParser.prototype.injectSeparators = function(value, separator) {
+NumberParser.prototype.injectSeparators = function(value, separator, decimalPoint) {
     var tempValue = value;
     if (tempValue.length < 4) {
         return tempValue;
     }
 
+    var possibleSymbols = separator + decimalPoint;
+    var hasThousand = new RegExp('(\\d\\d\\d\\d)[' + possibleSymbols + ']');
+    var partToSplit = new RegExp('([^' + possibleSymbols + '])(\\d\\d\\d)([' + possibleSymbols + '])');
+
     tempValue = tempValue.replace(/(\d\d\d)$/g, separator + "$1");
-    while (/(\d\d\d\d)[,.]/g.test(tempValue)) {
-        tempValue = tempValue.replace(/([^,.])(\d\d\d)([,.])/g, "$1" + separator + "$2$3");
+    while (hasThousand.test(tempValue)) {
+        tempValue = tempValue.replace(partToSplit, "$1" + separator + "$2$3");
     }
     return tempValue;
 }
 
 var cachedNumberParser = null;
 
-function formatNumber(value, format, separator) {
+function formatNumber(value, format, options) {
     if (!cachedNumberParser) {
         cachedNumberParser = new NumberParser();
     }
-    return cachedNumberParser.parseValue(value, format, separator);
+    return cachedNumberParser.parseValue(value, format);
 }
 
 if (module && module.exports) {

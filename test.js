@@ -18,29 +18,30 @@ describe('formatNumber(value, format, separator)', function() {
 
     it('should format value with symbols', function() {
         assert.equal('$123.456', formatNumber(123.456, "$%.3f"));
+        assert.equal('45.75%', formatNumber(45.75, "%.2f%"));
     });
 
     it('should format integers with separators', function() {
-        assert.equal('100', formatNumber(100, "%d", ","));
-        assert.equal('1,000', formatNumber(1000, "%d", ","));
-        assert.equal('10,000', formatNumber(10000, "%d", ","));
-        assert.equal('100,000', formatNumber(100000, "%d", ","));
-        assert.equal('1,000,000', formatNumber(1000000, "%d", ","));
-        assert.equal('1,000,000,000', formatNumber(1000000000, "%d", ","));
-        assert.equal('1,000,000,000,000', formatNumber(1000000000000, "%d", ","));
+        assert.equal('100', formatNumber(100, "%sd"));
+        assert.equal('1,000', formatNumber(1000, "%sd"));
+        assert.equal('10,000', formatNumber(10000, "%sd"));
+        assert.equal('100,000', formatNumber(100000, "%sd"));
+        assert.equal('1,000,000', formatNumber(1000000, "%sd"));
+        assert.equal('1,000,000,000', formatNumber(1000000000, "%sd"));
+        assert.equal('1,000,000,000,000', formatNumber(1000000000000, "%sd"));
     });
 
     it('should format floats with separators', function() {
-        assert.equal('100.55', formatNumber(100.55, "%f", ","));
-        assert.equal('1,000.55', formatNumber(1000.55, "%f", ","));
-        assert.equal('10,000.55', formatNumber(10000.55, "%f", ","));
-        assert.equal('100,000.55', formatNumber(100000.55, "%f", ","));
-        assert.equal('1,000,000.55', formatNumber(1000000.55, "%f", ","));
-        assert.equal('1,000,000,000.55', formatNumber(1000000000.55, "%f", ","));
-        assert.equal('1,000,000,000,000.55', formatNumber(1000000000000.55, "%f", ","));
+        assert.equal('100.55', formatNumber(100.55, "%sf"));
+        assert.equal('1,000.55', formatNumber(1000.55, "%sf"));
+        assert.equal('10,000.55', formatNumber(10000.55, "%sf"));
+        assert.equal('100,000.55', formatNumber(100000.55, "%sf"));
+        assert.equal('1,000,000.55', formatNumber(1000000.55, "%sf"));
+        assert.equal('1,000,000,000.55', formatNumber(1000000000.55, "%sf"));
+        assert.equal('1,000,000,000,000.55', formatNumber(1000000000000.55, "%16sf"));
     });
 
     it('should not add separators to the remainder', function() {
-        assert.equal('100.555555', formatNumber(100.555555, "%f", ","));
+        assert.equal('100.555555', formatNumber(100.555555, "%.6f"));
     });
 });
