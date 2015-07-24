@@ -2,13 +2,45 @@ var formatNumber = require('./numberparser');
 var assert = require('assert');
 
 describe('formatNumber(value, format, separator)', function() {
-    it('should format numbers without separators', function() {
-        assert.equal('0058', formatNumber(58, "%04d"));
-        assert.equal('$2.35', formatNumber(2.3456, "$%.2f"));
+    it('should format decimal values', function() {
+        assert.equal('123', formatNumber(123, "%d"));
+        assert.equal('000123', formatNumber(123, "%06d"));
+        assert.equal('999999123', formatNumber(123, "%99d"));
     });
 
-    it('should format numbers with separators', function() {
-        assert.equal('0,000,058', formatNumber(58, "%08d", ","));
-        assert.equal('$2,456.79', formatNumber(23456.789, "$%.2f", ","));
+    it('should format floating values', function() {
+        assert.equal('123.45', formatNumber(123.45, "%f"));
+        assert.equal('123.46', formatNumber(123.4567, "%.2f"));
+        assert.equal('100.0',  formatNumber(123.45, "%1.1f"));
+        assert.equal('123.45', formatNumber(123.45, "%12f"));
+        assert.equal('123.45000000', formatNumber(123.45, "%.8f"));
+    });
+
+    it('should format value with symbols', function() {
+        assert.equal('$123.456', formatNumber(123.456, "$%.3f"));
+    });
+
+    it('should format integers with separators', function() {
+        assert.equal('100', formatNumber(100, "%d", ","));
+        assert.equal('1,000', formatNumber(1000, "%d", ","));
+        assert.equal('10,000', formatNumber(10000, "%d", ","));
+        assert.equal('100,000', formatNumber(100000, "%d", ","));
+        assert.equal('1,000,000', formatNumber(1000000, "%d", ","));
+        assert.equal('1,000,000,000', formatNumber(1000000000, "%d", ","));
+        assert.equal('1,000,000,000,000', formatNumber(1000000000000, "%d", ","));
+    });
+
+    it('should format floats with separators', function() {
+        assert.equal('100.55', formatNumber(100.55, "%f", ","));
+        assert.equal('1,000.55', formatNumber(1000.55, "%f", ","));
+        assert.equal('10,000.55', formatNumber(10000.55, "%f", ","));
+        assert.equal('100,000.55', formatNumber(100000.55, "%f", ","));
+        assert.equal('1,000,000.55', formatNumber(1000000.55, "%f", ","));
+        assert.equal('1,000,000,000.55', formatNumber(1000000000.55, "%f", ","));
+        assert.equal('1,000,000,000,000.55', formatNumber(1000000000000.55, "%f", ","));
+    });
+
+    it('should not add separators to the remainder', function() {
+        assert.equal('100.555555', formatNumber(100.555555, "%f", ","));
     });
 });

@@ -9,7 +9,7 @@
 var NumberParser = function() {
     this.INTEGER_REGEX     = /%([0-9])?(\d+)?d/;
     this.FLOAT_REGEX       = /%(\d+)?\.?(\d+)?f/;
-    this.FORMAT_REGEX      = /%[\d\.,]+?([df])/;
+    this.FORMAT_REGEX      = /%.*([df])/;
     this.DEFAULT_DIGIT     = '0';
     this.DEFAULT_WIDTH     = null;
     this.DEFAULT_PRECISION = 12;
@@ -42,16 +42,15 @@ NumberParser.prototype.parseValue = function(value, format, separator) {
 
 NumberParser.prototype.formatInteger = function(value, format) {
     var formatParts = this.extractIntegerFormat(format);
-    if (!formatParts) {
-        return value;
+    if (formatParts) {
+        value = this.zeroFillValue(value, formatParts.digit, formatParts.width);
     }
-    var newValue = this.zeroFillValue(value, formatParts.digit, formatParts.width);
-    return format.replace(this.INTEGER_REGEX, newValue);
+    return format.replace(this.INTEGER_REGEX, value);
 }
 
 NumberParser.prototype.extractIntegerFormat = function(format) {
     var matches = format.match(this.INTEGER_REGEX);
-    if (matches.length < 3) {
+    if (!matches || matches.length < 3) {
         return null;
     }
 
@@ -98,14 +97,29 @@ NumberParser.prototype.extractFloatFormat = function(format) {
 }
 
 NumberParser.prototype.addSeparators = function(value, separator) {
-    var tempValue = value.toString();
+    if (!value) {
+        return value;
+    }
+
+    var splitValue = value.toString().split(".");
+    var tempValue = this.injectSeparators(splitValue[0], separator);
+
+    if (splitValue.length == 2) {
+        tempValue += "." + splitValue[1];
+    }
+
+    return tempValue;
+}
+
+NumberParser.prototype.injectSeparators = function(value, separator) {
+    var tempValue = value;
     if (tempValue.length < 4) {
         return tempValue;
     }
 
     tempValue = tempValue.replace(/(\d\d\d)$/g, separator + "$1");
     while (/(\d\d\d\d)[,.]/g.test(tempValue)) {
-        tempValue = tempValue.replace(/[^,.](\d\d\d)([,.])/g, separator + "$1$2");
+        tempValue = tempValue.replace(/([^,.])(\d\d\d)([,.])/g, "$1" + separator + "$2$3");
     }
     return tempValue;
 }
