@@ -20,14 +20,17 @@ var NumberParser = function(options) {
     options = options || {};
     var separator = options.separator ? options.separator : ',';
     var decimalPoint = options.decimalPoint ? options.decimalPoint : '.';
+    var possibleSymbols = separator + decimalPoint;
 
-    this.INTEGER_REGEX     = new RegExp('%([-+])?([0-9])?(\\d+)?([s])?d');
-    this.FLOAT_REGEX       = new RegExp('%(\\d+)?' + decimalPoint + '?(\\d+)?([s])?f');
-    this.FORMAT_REGEX      = new RegExp('%.*?([s])?([df])');
-    this.DEFAULT_DIGIT     = '0';
-    this.DEFAULT_WIDTH     = null;
-    this.DEFAULT_PRECISION = 12;
-    this.DEFAULT_SCALE     = 2;
+    this.INTEGER_REGEX        = new RegExp('%([-+])?([0-9])?(\\d+)?([s])?d');
+    this.FLOAT_REGEX          = new RegExp('%(\\d+)?' + decimalPoint + '?(\\d+)?([s])?f');
+    this.FORMAT_REGEX         = new RegExp('%.*?([s])?([df])');
+    this.HAS_THOUSAND_REGEX   = new RegExp('(\\d\\d\\d\\d)[' + possibleSymbols + ']');
+    this.THOUSAND_SPLIT_REGEX = new RegExp('([^' + possibleSymbols + '])(\\d\\d\\d)([' + possibleSymbols + '])');
+    this.DEFAULT_DIGIT        = '0';
+    this.DEFAULT_WIDTH        = null;
+    this.DEFAULT_PRECISION    = 12;
+    this.DEFAULT_SCALE        = 2;
 
     this.separator = separator;
     this.decimalPoint = decimalPoint;
@@ -169,12 +172,9 @@ NumberParser.prototype.injectSeparators = function(value, separator, decimalPoin
         return tempValue;
     }
 
-    var possibleSymbols = separator + decimalPoint;
-    var hasThousand = new RegExp('(\\d\\d\\d\\d)[' + possibleSymbols + ']');
-    var partToSplit = new RegExp('([^' + possibleSymbols + '])(\\d\\d\\d)([' + possibleSymbols + '])');
     tempValue = tempValue.replace(/(\d\d\d)$/g, separator + "$1");
-    while (hasThousand.test(tempValue)) {
-        tempValue = tempValue.replace(partToSplit, "$1" + separator + "$2$3");
+    while (this.HAS_THOUSAND_REGEX.test(tempValue)) {
+        tempValue = tempValue.replace(this.THOUSAND_SPLIT_REGEX, "$1" + separator + "$2$3");
     }
     return tempValue;
 }
