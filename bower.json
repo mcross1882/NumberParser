@@ -1,0 +1,26 @@
+{
+  "name": "NumberParser",
+  "main": "numberparser.js",
+  "version": "0.0.1",
+  "homepage": "https://github.com/mcross1882/NumberParser",
+  "authors": [
+    "Matthew Cross <blacklightgfx@gmail.com>"
+  ],
+  "description": "A simple number formatting utility for Javascript and Node.js",
+  "keywords": [
+  "keywords": [
+    "number",
+    "formatting",
+    "printf",
+    "zerofill",
+    "rounding"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
