@@ -1,5 +1,11 @@
-var formatNumber = require('./numberparser');
+var NumberParser = require('./numberparser');
 var assert = require('assert');
+
+var globalParser = new NumberParser();
+
+function formatNumber(value, format) {
+    return globalParser.parseValue(value, format);
+}
 
 describe('formatNumber(value, format, options)', function() {
     it('should format decimal values', function() {
@@ -47,6 +53,7 @@ describe('formatNumber(value, format, options)', function() {
     });
 
     it('should allow of overriding of default symbol formatting', function() {
-        assert.equal('€10.500,25', formatNumber(10500.25, "€%sf", { separator: '.', decimalPoint: ',' }));
+        var customParser = new NumberParser({ separator: '.', decimalPoint: ',' });
+        assert.equal('€10.500,25', customParser.parseValue(10500.25, "€%sf"));
     });
 });

@@ -179,12 +179,12 @@ NumberParser.prototype.injectSeparators = function(value, separator, decimalPoin
     return tempValue;
 }
 
-function formatNumber(value, format, options) {
-    return new NumberParser(options).parseValue(value, format);
+if (module && module.exports) {
+    module.exports = NumberParser;
 }
 
-if (module && module.exports) {
-    module.exports = formatNumber;
+if (!module && typeof window != 'undefined') {
+    window.NumberParser = NumberParser;
 }
 
 })();
