@@ -58,3 +58,18 @@ var customParser = new NumberParser({ separator: '.', decimalPoint: ',' });
 assert.equal('€10.500,25', customParser.parseValue(10500.25, "€%sf"));
 ```
 
+#### Compiling the source code
+
+If you want to recompile the source files you will need to use the Google Closure Compiler.
+After you have it installed execute the following commands below.
+
+```
+$ export CLOSURE_COMPILER_PATH=/path/to/closure-compiler.jar
+
+$ java -jar $CLOSURE_COMPILER_PATH \
+    --create_source_map=numberparser.map \
+    --compilation_level=ADVANCED \
+    --warning_level=DEFAULT \
+    --js_output_file=numberparser.min.js \
+    numberparser.js
+```
