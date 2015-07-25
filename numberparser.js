@@ -36,15 +36,6 @@ var NumberParser = function(options) {
     this.decimalPoint = decimalPoint;
 }
 
-/**
- * Parse a number given a certain format. This method behaves very
- * similar to `sprintf` however it is optimized to only work with numbers.
- * For a list of valid format strings please view the documentation.
- *
- * @param  {Number} value the number to format
- * @param  {string} format the parse format that the number should be rendered as
- * @return {string} a number formatted as a string
- */
 NumberParser.prototype.parseValue = function(value, format) {
     if (isNaN(value)) {
         throw new Error("Cannot parse value. Value must be a number");
