@@ -4,6 +4,7 @@
  * @author  Matthew Cross <blacklightgfx@gmail.com>
  * @package NumberParser
  */
+
 (function() {
 
 /**
@@ -18,8 +19,8 @@
  */
 var NumberParser = function(options) {
     options = options || {};
-    var separator = options.separator ? options.separator : ',';
-    var decimalPoint = options.decimalPoint ? options.decimalPoint : '.';
+    var separator = options['separator'] ? options['separator'] : ',';
+    var decimalPoint = options['decimalPoint'] ? options['decimalPoint'] : '.';
     var possibleSymbols = separator + decimalPoint;
 
     this.INTEGER_REGEX        = new RegExp('%([-+])?([0-9])?(\\d+)?([s])?d');
@@ -182,12 +183,17 @@ NumberParser.prototype.injectSeparators = function(value, separator, decimalPoin
     return tempValue;
 }
 
-if (typeof module != 'undefined' && typeof module.exports != 'undefined') {
-    module.exports = NumberParser;
+/**
+ * Export the parseValue method to protect against minification
+ */
+NumberParser.prototype['parseValue']   = NumberParser.prototype.parseValue;
+
+if (typeof module != 'undefined' && typeof module['exports'] != 'undefined') {
+    module['exports'] = NumberParser;
 }
 
 if (typeof module == 'undefined' && typeof window != 'undefined') {
-    window.NumberParser = NumberParser;
+    window['NumberParser'] = NumberParser;
 }
 
 })();
