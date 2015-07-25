@@ -23,7 +23,7 @@ var NumberParser = function(options) {
     var possibleSymbols = separator + decimalPoint;
 
     this.INTEGER_REGEX        = new RegExp('%([-+])?([0-9])?(\\d+)?([s])?d');
-    this.FLOAT_REGEX          = new RegExp('%(\\d+)?' + decimalPoint + '?(\\d+)?([s])?f');
+    this.FLOAT_REGEX          = new RegExp('%([0-9]+)?[' + decimalPoint + ']?([0-9]+)?([s])?f');
     this.FORMAT_REGEX         = new RegExp('%.*?([s])?([df])');
     this.HAS_THOUSAND_REGEX   = new RegExp('(\\d\\d\\d\\d)[' + possibleSymbols + ']');
     this.THOUSAND_SPLIT_REGEX = new RegExp('([^' + possibleSymbols + '])(\\d\\d\\d)([' + possibleSymbols + '])');
@@ -46,6 +46,10 @@ var NumberParser = function(options) {
  * @return {string} a number formatted as a string
  */
 NumberParser.prototype.parseValue = function(value, format) {
+    if (isNaN(value)) {
+        throw new Error("Cannot parse value. Value must be a number");
+    }
+
     var parts = this.extractFormatParts(format);
     var result = value;
     switch (parts.formatType) {
@@ -129,6 +133,10 @@ NumberParser.prototype.addRightPadding = function(value, digit, width) {
 }
 
 NumberParser.prototype.formatFloat = function(value, format) {
+    if (!this.isValidFloatFormat(format)) {
+        throw new Error("Invalid float format given. Too many decimal points in format");
+    }
+
     var formatParts = this.extractFloatFormat(format);
     if (!formatParts) {
         return value;
@@ -137,6 +145,10 @@ NumberParser.prototype.formatFloat = function(value, format) {
     var newPrecision = parseFloat(value).toPrecision(formatParts.precision);
     var newScale = parseFloat(newPrecision).toFixed(formatParts.scale);
     return format.replace(this.FLOAT_REGEX, newScale).replace(/[,.]/g, this.decimalPoint);
+}
+
+NumberParser.prototype.isValidFloatFormat = function(format) {
+    return format.split(this.decimalPoint).length <= 2;
 }
 
 NumberParser.prototype.extractFloatFormat = function(format) {
@@ -179,11 +191,11 @@ NumberParser.prototype.injectSeparators = function(value, separator, decimalPoin
     return tempValue;
 }
 
-if (module && module.exports) {
+if (typeof module != 'undefined' && typeof module.exports != 'undefined') {
     module.exports = NumberParser;
 }
 
-if (!module && typeof window != 'undefined') {
+if (typeof module == 'undefined' && typeof window != 'undefined') {
     window.NumberParser = NumberParser;
 }
 

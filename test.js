@@ -70,4 +70,11 @@ describe('value, format, options)', function() {
         testErrorCall(123, "%2.2d");
         testErrorCall(123, "%2.2.2f");
     });
+
+    it('should throw an error if the value is not a number', function() {
+        testErrorCall('fail', "%d");
+        testErrorCall('fail', "%f");
+        testErrorCall('123abc', "%d");
+        testErrorCall('abc123', "%f");
+    });
 });
