@@ -21,5 +21,8 @@
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/mcross1882/NumberParser/issues"
+  },
+  "devDependencies": {
+    "mocha": "^2.2.5"
   }
 }
