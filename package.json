@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/mcross1882/NumberParser"
+    "url": "git://github.com/mcross1882/NumberParser"
   },
   "keywords": [
     "number",

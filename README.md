@@ -6,13 +6,28 @@ A simple number formatting utility for `Javascript` and `Node.js`
 Installation via NPM
 
 ```
-TODO
+$ npm install numberparser
 ```
 
 Installation via Bower
 
 ```
-TODO
+$ bower install numberparser
+```
+
+#### Including the library
+
+If you are using `Node.js` you can do the following..
+
+```js
+var NumberParser = require('numberparser');
+```
+
+If you are using the browser you can include the `Javascript` file and
+`NumberParser` will be exported to the `window` object.
+
+```html
+<script src="/bower_components/numberparser/numberparser.js" type="text/javascript"></script>
 ```
 
 #### Using the library

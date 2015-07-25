@@ -6,8 +6,11 @@
   "authors": [
     "Matthew Cross <blacklightgfx@gmail.com>"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mcross1882/NumberParser"
+  },
   "description": "A simple number formatting utility for Javascript and Node.js",
-  "keywords": [
   "keywords": [
     "number",
     "formatting",
