@@ -1,4 +1,4 @@
-var NumberParser = require('./numberparser');
+var NumberParser = require('./numberparser.min');
 var assert = require('assert');
 
 var globalParser = new NumberParser();
