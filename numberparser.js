@@ -6,6 +6,16 @@
  */
 (function() {
 
+/**
+ * NumberParser exposes the `parseValue` method which can format numbers into strings.
+ * The `parseValue` method works similar to sprintf but is optimized for numbers. When
+ * creating a `NumberParser` an options object can be passed into the constructor. Currently
+ * the supported `option` properties are
+ * - decimalPoint defaults to "."
+ * - separator defaults to ","
+ *
+ * @param {Object} options a map containing configuration properties
+ */
 var NumberParser = function(options) {
     options = options || {};
     var separator = options.separator ? options.separator : ',';
@@ -23,6 +33,15 @@ var NumberParser = function(options) {
     this.decimalPoint = decimalPoint;
 }
 
+/**
+ * Parse a number given a certain format. This method behaves very
+ * similar to `sprintf` however it is optimized to only work with numbers.
+ * For a list of valid format strings please view the documentation.
+ *
+ * @param  {Number} value the number to format
+ * @param  {string} format the parse format that the number should be rendered as
+ * @return {string} a number formatted as a string
+ */
 NumberParser.prototype.parseValue = function(value, format) {
     var parts = this.extractFormatParts(format);
     var result = value;
