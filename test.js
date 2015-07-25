@@ -4,8 +4,9 @@ var assert = require('assert');
 describe('formatNumber(value, format, options)', function() {
     it('should format decimal values', function() {
         assert.equal('123', formatNumber(123, "%d"));
-        assert.equal('000123', formatNumber(123, "%06d"));
-        assert.equal('999999123', formatNumber(123, "%99d"));
+        assert.equal('123000', formatNumber(123, "%06d"));
+        assert.equal('000123', formatNumber(123, "%-06d"));
+        assert.equal('999999123', formatNumber(123, "%-99d"));
     });
 
     it('should format floating values', function() {

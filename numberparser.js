@@ -11,7 +11,7 @@ var NumberParser = function(options) {
     var separator = options.separator ? options.separator : ',';
     var decimalPoint = options.decimalPoint ? options.decimalPoint : '.';
 
-    this.INTEGER_REGEX     = new RegExp('%([0-9])?(\\d+)?([s])?d');
+    this.INTEGER_REGEX     = new RegExp('%([-+])?([0-9])?(\\d+)?([s])?d');
     this.FLOAT_REGEX       = new RegExp('%(\\d+)?' + decimalPoint + '?(\\d+)?([s])?f');
     this.FORMAT_REGEX      = new RegExp('%.*?([s])?([df])');
     this.DEFAULT_DIGIT     = '0';
@@ -51,15 +51,17 @@ NumberParser.prototype.extractFormatParts = function(format) {
     }
 
     return {
-        usingSeparator: matches[1] ? matches[1] : false,
+        usingSeparator: 's' == matches[1],
         formatType: matches[2]
     };
 }
 
 NumberParser.prototype.formatInteger = function(value, format) {
     var formatParts = this.extractIntegerFormat(format);
-    if (formatParts) {
-        value = this.zeroFillValue(value, formatParts.digit, formatParts.width);
+    if (formatParts && formatParts.padLeft) {
+        value = this.addLeftPadding(value, formatParts.digit, formatParts.width);
+    } else {
+        value = this.addRightPadding(value, formatParts.digit, formatParts.width);
     }
 
     return format.replace(this.INTEGER_REGEX, value);
@@ -67,17 +69,18 @@ NumberParser.prototype.formatInteger = function(value, format) {
 
 NumberParser.prototype.extractIntegerFormat = function(format) {
     var matches = format.match(this.INTEGER_REGEX);
-    if (!matches || matches.length < 3) {
+    if (!matches || matches.length < 4) {
         return null;
     }
 
     return {
-        digit: matches[1] ? matches[1] : this.DEFAULT_DIGIT,
-        width: matches[2] ? matches[2] : this.DEFAULT_WIDTH
+        padLeft: '-' == matches[1],
+        digit:   matches[2] ? matches[2] : this.DEFAULT_DIGIT,
+        width:   matches[3] ? matches[3] : this.DEFAULT_WIDTH
     };
 }
 
-NumberParser.prototype.zeroFillValue = function(value, digit, width) {
+NumberParser.prototype.addLeftPadding = function(value, digit, width) {
     if (!width || width < 0) {
         return value;
     }
@@ -88,6 +91,19 @@ NumberParser.prototype.zeroFillValue = function(value, digit, width) {
         padding += digit;
     }
     return (padding + value).slice(-width);
+}
+
+NumberParser.prototype.addRightPadding = function(value, digit, width) {
+    if (!width || width < 0) {
+        return value;
+    }
+
+    var padding = value.toString();
+    var index = padding.length;
+    while (index++ < width) {
+        padding += digit;
+    }
+    return padding;
 }
 
 NumberParser.prototype.formatFloat = function(value, format) {
