@@ -1,5 +1,5 @@
 {
-  "name": "NumberParser",
+  "name": "numberparser",
   "main": "numberparser.js",
   "version": "0.0.1",
   "homepage": "https://github.com/mcross1882/NumberParser",
