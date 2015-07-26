@@ -23,6 +23,6 @@
     "url": "https://github.com/mcross1882/NumberParser/issues"
   },
   "devDependencies": {
-    "mocha": "^2.2.5"
+    "mocha": "2.2.5"
   }
 }
