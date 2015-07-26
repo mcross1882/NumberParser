@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/mcross1882/NumberParser.svg)](https://travis-ci.org/mcross1882/NumberParser)
+
 # NumberParser
 A simple number formatting utility for `Javascript` and `Node.js`
 
