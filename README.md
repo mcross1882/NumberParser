@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/mcross1882/NumberParser.svg?branch=master)](https://travis-ci.org/mcross1882/NumberParser)
+[![Coverage Status](http://coveralls.io/repos/mcross1882/NumberParser/badge.svg?branch=master&service=github)](http://coveralls.io/github/mcross1882/NumberParser?branch=master)
 
 # NumberParser
 A simple number formatting utility for `Javascript` and `Node.js`
