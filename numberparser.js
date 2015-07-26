@@ -4,7 +4,6 @@
  * @author  Matthew Cross <blacklightgfx@gmail.com>
  * @package NumberParser
  */
-
 (function() {
 
 /**
