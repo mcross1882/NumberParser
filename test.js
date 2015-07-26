@@ -30,6 +30,9 @@ describe('value, format, options)', function() {
     });
 
     it('should format value with symbols', function() {
+        testSuccessCall('123%', 123, "%d%");
+        testSuccessCall('12300%', 123, "%05d%");
+        testSuccessCall('00123%', 123, "%-05d%");
         testSuccessCall('$123.456', 123.456, "$%.3f");
         testSuccessCall('45.75%', 45.75, "%.2f%");
     });
@@ -55,7 +58,9 @@ describe('value, format, options)', function() {
     });
 
     it('should not add separators to the remainder', function() {
-        testSuccessCall('1,000.555555', 1000.555555, "%.6sf");
+        testSuccessCall('1,000,000.555500', 1000000.5555, "%.6sf");
+        testSuccessCall('10,000.555555', 10000.555555, "%.6sf");
+        testSuccessCall('1,000.555555555', 1000.555555555, "%20.9sf");
     });
 
     it('should allow of overriding of default symbol formatting', function() {
