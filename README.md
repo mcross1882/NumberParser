@@ -35,6 +35,25 @@ If you are using the browser you can include the `Javascript` file and
 
 #### Using the library
 
+##### Format
+
+```
+% [+-] [width] [[.] [precision]] [s] [df]
+```
+
+- `+-` If set `+` indicates to pad the number on the right. If set to `-` the number will be
+padding on the left. Defaults to `+`
+- `width` The width of  the number. If a width is specified the number will be scaled
+to match the input width (applying padding if required). When padding is applied the first digit of
+`width` is used to determine the padding character and the following digits represent the width. Defaults to `12`
+- `precision` if a decimal point is given in the value and a `precision` is specified then the
+remainder on the number will be rounded or padded to the proper precision. Defaults to `2`
+- `s` This flag indicates whether or not you want separators to appear in the formatted value
+- `d|f` The output type, use `d` for integer values and `f` for floating point values
+
+
+##### Examples
+
 ```js
 var parser = new NumberParser();
 
