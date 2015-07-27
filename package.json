@@ -24,12 +24,19 @@
   },
   "devDependencies": {
     "blanket": "1.1.7",
-    "mocha": "2.2.5"
+    "mocha": "2.2.5",
+    "mocha-lcov-reporter": "0.0.2",
+    "coveralls": "2.11.3"
   },
   "config": {
     "blanket": {
-      "pattern": ["numberparser.js"],
-      "data-cover-never": ["node_modules", "tests"]
+      "pattern": [
+        "numberparser.js"
+      ],
+      "data-cover-never": [
+        "node_modules",
+        "tests"
+      ]
     }
   }
 }
