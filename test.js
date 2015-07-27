@@ -1,10 +1,10 @@
-var NumberParser = require('./numberparser.min');
 var assert = require('assert');
-
+var blanket = require('blanket');
+var NumberParser = require('./numberparser');
 var globalParser = new NumberParser();
 
 function testSuccessCall(expected, value, format) {
-    assert.equal(expected, globalParser.parseValue(value, format));
+    assert.strictEqual(expected, globalParser.parseValue(value, format));
 }
 
 function testErrorCall(value, format) {
@@ -13,10 +13,10 @@ function testErrorCall(value, format) {
     }, Error);
 }
 
-describe('value, format, options)', function() {
+describe('NumberParser.parseValue(value, format, options)', function() {
     it('should format decimal values', function() {
         testSuccessCall('123', 123, "%d");
-        testSuccessCall('123000', 123, "%06d");
+        testSuccessCall('123000', 123, "%+06d");
         testSuccessCall('000123', 123, "%-06d");
         testSuccessCall('999999123', 123, "%-99d");
     });
@@ -24,14 +24,15 @@ describe('value, format, options)', function() {
     it('should format floating values', function() {
         testSuccessCall('123.45', 123.45, "%f");
         testSuccessCall('123.46', 123.4567, "%.2f");
-        testSuccessCall('100.0',  123.45, "%1.1f");
-        testSuccessCall('123.45', 123.45, "%12f");
+        testSuccessCall('123.5',  123.45, "%10.1f");
         testSuccessCall('123.45000000', 123.45, "%.8f");
+        testSuccessCall('123000.4500', 123.45, "%+06.4f");
+        testSuccessCall('000123.4500', 123.45, "%-06.4f");
     });
 
     it('should format value with symbols', function() {
         testSuccessCall('123%', 123, "%d%");
-        testSuccessCall('12300%', 123, "%05d%");
+        testSuccessCall('12300%', 123, "%+05d%");
         testSuccessCall('00123%', 123, "%-05d%");
         testSuccessCall('$123.456', 123.456, "$%.3f");
         testSuccessCall('45.75%', 45.75, "%.2f%");
@@ -70,16 +71,16 @@ describe('value, format, options)', function() {
 
     it('should throw an error if the format cannot be parsed', function() {
         testErrorCall(123, "%x");
-        testErrorCall(123, "%abcd");
-        testErrorCall(123, "%&92d");
-        testErrorCall(123, "%2.2d");
         testErrorCall(123, "%2.2.2f");
     });
 
     it('should throw an error if the value is not a number', function() {
-        testErrorCall('fail', "%d");
-        testErrorCall('fail', "%f");
-        testErrorCall('123abc', "%d");
-        testErrorCall('abc123', "%f");
+        var formats = ["%d", "%f"];
+        for (var i in formats) {
+            testErrorCall(null, formats[i]);
+            testErrorCall('fail', formats[i]);
+            testErrorCall('123abc', formats[i]);
+            testErrorCall('abc123', formats[i]);
+        }
     });
 });
