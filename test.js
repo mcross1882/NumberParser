@@ -1,6 +1,6 @@
-var NumberParser = require('./numberparser');
 var assert = require('assert');
-
+var blanket = require('blanket');
+var NumberParser = require('./numberparser');
 var globalParser = new NumberParser();
 
 function testSuccessCall(expected, value, format) {

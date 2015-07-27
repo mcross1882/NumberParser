@@ -23,6 +23,13 @@
     "url": "https://github.com/mcross1882/NumberParser/issues"
   },
   "devDependencies": {
+    "blanket": "1.1.7",
     "mocha": "2.2.5"
+  },
+  "config": {
+    "blanket": {
+      "pattern": ["numberparser.js"],
+      "data-cover-never": ["node_modules", "tests"]
+    }
   }
 }
