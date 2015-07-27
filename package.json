@@ -4,7 +4,7 @@
   "description": "A simple number formatting utility for Javascript and Node.js",
   "main": "numberparser.js",
   "scripts": {
-    "test": "mocha --require blanket --reporter mocha-lcov-reporter | ./node_modules/coveralls/bin/coveralls.js"
+    "test": "NODE_ENV=test NUMBERPARSER_COVERAGE=1 mocha --require blanket --reporter mocha-lcov-reporter | ./node_modules/coveralls/bin/coveralls.js"
   },
   "repository": {
     "type": "git",
