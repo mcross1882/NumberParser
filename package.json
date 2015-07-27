@@ -31,6 +31,7 @@
   },
   "config": {
     "blanket": {
+      "pattern": "./src/numberparser.js",
       "data-cover-never": ["node_modules", "tests"]
     }
   }
