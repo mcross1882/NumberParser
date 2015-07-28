@@ -40,6 +40,7 @@ NumberParser.prototype.parseValue = function(value, format) {
     if (typeof value != 'number' || isNaN(value)) {
         throw new Error("Cannot parse value. Value must be a number");
     }
+    
 
     var parts = this.extractFormatParts(format);
     var result = value;
@@ -54,7 +55,7 @@ NumberParser.prototype.parseValue = function(value, format) {
             throw new Error('Unknown format type "' + parts.formatType + '" was given');
     }
 
-    if (parts.usingSeparator) {
+    if (result && parts.usingSeparator) {
         result = this.addSeparators(result);
     }
 
@@ -76,7 +77,7 @@ NumberParser.prototype.extractFormatParts = function(format) {
 NumberParser.prototype.formatInteger = function(value, format) {
     var formatParts = this.extractIntegerFormat(format);
     if (!formatParts) {
-        return value;
+        throw new Error("Invalid integer format given " + format);
     } else if (formatParts.padLeft) {
         value = this.addLeftPadding(value, formatParts.digit, formatParts.width);
     } else if (formatParts.padRight) {
@@ -96,15 +97,11 @@ NumberParser.prototype.extractIntegerFormat = function(format) {
         padLeft:  '-' == matches[1],
         padRight: '+' == matches[1],
         digit:   matches[2] ? matches[2] : this.DEFAULT_DIGIT,
-        width:   matches[3] ? matches[3] : this.DEFAULT_WIDTH
+        width:   matches[3] ? Math.abs(matches[3]) : this.DEFAULT_WIDTH
     };
 }
 
 NumberParser.prototype.addLeftPadding = function(value, digit, width) {
-    if (!width || width < 0) {
-        return value;
-    }
-
     var padding = "";
     var index = 0;
     while (index++ < width) {
@@ -114,10 +111,6 @@ NumberParser.prototype.addLeftPadding = function(value, digit, width) {
 }
 
 NumberParser.prototype.addRightPadding = function(value, digit, width) {
-    if (!width || width < 0) {
-        return value;
-    }
-
     var padding = value.toString();
     var index = padding.length;
     while (index++ < width) {
@@ -133,7 +126,7 @@ NumberParser.prototype.formatFloat = function(value, format) {
 
     var formatParts = this.extractFloatFormat(format);
     if (!formatParts) {
-        return value;
+        throw new Error("Invalid float format given " + format);
     }
 
     var paddedValue = this.padFloatValues(value, formatParts);
@@ -170,10 +163,6 @@ NumberParser.prototype.padFloatValues = function(value, formatParts) {
 }
 
 NumberParser.prototype.addSeparators = function(value) {
-    if (!value) {
-        return value;
-    }
-
     var splitValue = value.toString().split(this.decimalPoint);
     var tempValue = this.injectSeparators(splitValue[0], this.separator, this.decimalPoint);
 
