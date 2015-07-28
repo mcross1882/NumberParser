@@ -16,6 +16,7 @@ function testErrorCall(value, format) {
 describe('NumberParser.parseValue(value, format, options)', function() {
     it('should format decimal values', function() {
         testSuccessCall('123', 123, "%d");
+        testSuccessCall('123', 123, "%00d");
         testSuccessCall('123000', 123, "%+06d");
         testSuccessCall('000123', 123, "%-06d");
         testSuccessCall('999999123', 123, "%-99d");
@@ -23,6 +24,7 @@ describe('NumberParser.parseValue(value, format, options)', function() {
 
     it('should format floating values', function() {
         testSuccessCall('123.45', 123.45, "%f");
+        testSuccessCall('123.45', 123.45, "%00f");
         testSuccessCall('123.46', 123.4567, "%.2f");
         testSuccessCall('123.5',  123.45, "%10.1f");
         testSuccessCall('123.45000000', 123.45, "%.8f");
@@ -72,6 +74,10 @@ describe('NumberParser.parseValue(value, format, options)', function() {
     it('should throw an error if the format cannot be parsed', function() {
         testErrorCall(123, "%x");
         testErrorCall(123, "%2.2.2f");
+        testErrorCall(123, "%e");
+        testErrorCall(123, "%zxy");
+        testErrorCall(123, "%abcd");
+        testErrorCall(123, "%abcf");
     });
 
     it('should throw an error if the value is not a number', function() {
