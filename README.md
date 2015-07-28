@@ -30,7 +30,7 @@ If you are using the browser you can include the `Javascript` file and
 `NumberParser` will be exported to the `window` object.
 
 ```html
-<script src="/bower_components/numberparser/numberparser.js" type="text/javascript"></script>
+<script src="/bower_components/numberparser/src/numberparser.min.js" type="text/javascript"></script>
 ```
 
 #### Using the library
