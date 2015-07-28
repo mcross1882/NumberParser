@@ -1,7 +1,7 @@
 {
   "name": "numberparser",
   "main": "numberparser.js",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "homepage": "https://github.com/mcross1882/NumberParser",
   "authors": [
     "Matthew Cross <blacklightgfx@gmail.com>"
