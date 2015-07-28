@@ -38,7 +38,7 @@
         "tests"
       ],
       "data-cover-reporter-options": {
-        "shortnames": true
+        "shortnames": false
       }
     }
   }
