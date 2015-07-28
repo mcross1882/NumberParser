@@ -1,11 +1,11 @@
 {
   "name": "numberparser",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "A simple number formatting utility for Javascript and Node.js",
-  "main": "numberparser.js",
+  "main": "./src/numberparser.js",
   "scripts": {
-    "test": "mocha",
-    "coveralls": "NODE_ENV=test YOURPACKAGE_COVERAGE=1 mocha --require blanket --reporter mocha-lcov-reporter | ./node_modules/coveralls/bin/coveralls.js"
+    "test": "./node_modules/.bin/mocha",
+    "coverage": "multi='dot=- mocha-lcov-reporter=coverage.lcov' ./node_modules/mocha/bin/mocha -r blanket -R mocha-multi && (cat ./coverage.lcov | ./node_modules/coveralls/bin/coveralls.js)"
   },
   "repository": {
     "type": "git",
@@ -25,16 +25,21 @@
   },
   "devDependencies": {
     "blanket": "1.1.7",
+    "coveralls": "2.11.3",
     "mocha": "2.2.5",
     "mocha-lcov-reporter": "0.0.2",
-    "coveralls": "2.11.3"
+    "mocha-multi": "0.7.1"
   },
   "config": {
     "blanket": {
-      "pattern": [
-        "numberparser.js"
+      "pattern": "src/",
+      "data-cover-never": [
+        "node_modules",
+        "tests"
       ],
-      "data-cover-never": ["node_modules"]
+      "data-cover-reporter-options": {
+        "shortnames": false
+      }
     }
   }
 }
